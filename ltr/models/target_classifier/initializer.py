@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from ltr.external.PreciseRoIPooling.pytorch.prroi_pool import PrRoIPool2D
+from PreciseRoIPooling.pytorch.prroi_pool import PrRoIPool2D
 from ltr.models.layers.blocks import conv_block
 import math
 

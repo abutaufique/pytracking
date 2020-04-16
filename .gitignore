@@ -11,3 +11,7 @@ pytracking/networks/
 pytracking/tracking_results/
 pytracking/evaluation/local.py
 pytracking/run_local.py
+*.swp
+download_model.sh
+setenv.sh
+_submodules/*egg-info
