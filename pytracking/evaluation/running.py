@@ -2,6 +2,8 @@ import numpy as np
 import multiprocessing
 import os
 from itertools import product
+import pdb
+
 from pytracking.evaluation import Sequence, Tracker
 
 
@@ -23,7 +25,7 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, visdom_info=None)
         output = tracker.run(seq, debug=debug, visdom_info=visdom_info)
     else:
         try:
-            output = tracker.run(seq, debug=debug, visdom_info=visdom_info)
+            output = tracker.run(seq, debug=debug, visualization=True, visdom_info=visdom_info)
         except Exception as e:
             print(e)
             return

@@ -6,6 +6,7 @@ env_path = os.path.join(os.path.dirname(__file__), '..')
 if env_path not in sys.path:
     sys.path.append(env_path)
 
+from pytracking.evaluation.vividdataset import VIVIDDataset
 from pytracking.evaluation.otbdataset import OTBDataset
 from pytracking.evaluation.nfsdataset import NFSDataset
 from pytracking.evaluation.uavdataset import UAVDataset
@@ -56,6 +57,8 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
         dataset = GOT10KDatasetLTRVal()
     elif dataset_name == 'lasot':
         dataset = LaSOTDataset()
+    elif dataset_name == 'vivid':
+        dataset = VIVIDDataset()
     else:
         raise ValueError('Unknown dataset name')
 

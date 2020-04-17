@@ -2,8 +2,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2 as cv
 import os
+from os import makedirs
+from os.path import isdir,join
 import time
 import torch
+
 from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
 from pytracking.utils.visdom import Visdom
 from pytracking.features.preprocessing import torch_to_numpy
@@ -81,7 +84,7 @@ class BaseTracker:
 
         if self.params.visualization and self.visdom is None:
             self.init_visualization()
-            self.visualize(image, sequence.get('init_bbox'))
+            self.visualize(image, sequence.get('init_bbox'), sequence.name, 0)
 
         start_time = time.time()
         out = self.initialize(image, sequence.init_info())
@@ -94,7 +97,7 @@ class BaseTracker:
             self.visdom.register((image, sequence.get('init_bbox')), 'Tracking', 1, 'Tracking')
 
         # Track
-        for frame in sequence.frames[1:]:
+        for i,frame in enumerate(sequence.frames[1:]):
             while True:
                 if not self.pause_mode:
                     break
@@ -113,7 +116,7 @@ class BaseTracker:
             if self.visdom is not None:
                 self.visdom.register((image, out['target_bbox']), 'Tracking', 1, 'Tracking')
             elif self.params.visualization:
-                self.visualize(image, out['target_bbox'])
+                self.visualize(image, out['target_bbox'], sequence.name, i+1)
 
         return output
 
@@ -356,7 +359,7 @@ class BaseTracker:
         self.fig.canvas.mpl_connect('key_press_event', self.press)
         plt.tight_layout()
 
-    def visualize(self, image, state):
+    def visualize(self, image, state, seq_name, frame_no):
         self.ax.cla()
         self.ax.imshow(image)
         rect = patches.Rectangle((state[0], state[1]), state[2], state[3], linewidth=1, edgecolor='r', facecolor='none')
@@ -368,7 +371,10 @@ class BaseTracker:
             self.ax.add_patch(rect)
         self.ax.set_axis_off()
         self.ax.axis('equal')
-        draw_figure(self.fig)
+        #draw_figure(self.fig)
+        if not isdir(seq_name):
+            os.makedirs(seq_name)
+        self.fig.savefig(join(seq_name, 'frame' + str(frame_no).zfill(5) + '.png'))
 
         if self.pause_mode:
             keypress = False

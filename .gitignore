@@ -15,3 +15,8 @@ pytracking/run_local.py
 download_model.sh
 setenv.sh
 _submodules/*egg-info
+*.png
+*.jpg
+egtest01/
+egtest04/
+egtest05/
